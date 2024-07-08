@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: rgb(75, 205, 127);
+            padding-left: 5px;
+            text-transform: capitalize;  
+        }
+
+        .container {
+            max-width: 800px;
+            background-color: rgb(49, 32, 163);
+            max-height: fit-content;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: black;
+            text-decoration: solid;
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+        }
+
+        form {
+            margin: 20px;
+            background-color: rgb(153, 171, 127);
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        form label {
+            display: inline-block;
+            padding-bottom: 20px;
+        }
+
+        form input {
+            width: calc(100% - 30px);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc; 
+        }
+
+        form button {
+            align-self: center;
+            border-radius: 25px;
+            height: 50px;
+            width: 150px;
+            text-transform: capitalize;
+            background-color: rgb(88, 88, 73);
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            left: 80%;
+            color: white;
+        }
+
+        form button:hover { 
+            background-color: blue;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #a45e5e;
+            color: white;
+        }
+
+        table button {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        table button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <header><h1>Student Registration System</h1></header>
+
+    <main>
+        <div class="container">
+            <form id="registrationForm">
+                <label for="name">Student Name</label>
+                <input type="text" id="name" required>
+                <br>
+                <label for="studentId">Student ID</label>
+                <input type="text" id="studentId" required>
+                <br>
+                <label for="email">Email ID</label>
+                <input type="email" id="email" required>
+                <br>
+                <label for="contactNumber">Contact Number</label>
+                <input type="text" id="contactNumber" required>
+                <br>
+                <button type="button" id="submit">Register Here</button>
+            </form>
+        
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Email</th>
+                        <th>Contact Number</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table content will be dynamically added -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const nameInput = document.querySelector("#name");
+        const studentIdInput = document.querySelector("#studentId");
+        const emailInput = document.querySelector("#email");
+        const contactNumberInput = document.querySelector("#contactNumber");
+        const submitButton = document.querySelector("#submit");
+        const table = document.querySelector("#studentTable tbody");
+
+        // Function to add a new student to the table
+        function addStudentToTable(name, studentId, email, contactNumber) {
+            const newRow = table.insertRow();
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+
+            cell1.textContent = name;
+            cell2.textContent = studentId;
+            cell3.textContent = email;
+            cell4.textContent = contactNumber;
+         //adding edit button
+            const editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.classList.add("edit-btn");
+            cell5.appendChild(editButton);
+        //adding delete button
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.classList.add("delete-btn");
+            cell5.appendChild(deleteButton);
+
+        // Add event listeners for edit and delete buttons
+            editButton.addEventListener("click", () => editStudent(newRow));
+            deleteButton.addEventListener("click", () => table.deleteRow(newRow.rowIndex));
+        }
+
+        // Function to edit student details
+        function editStudent(row) {
+            const cells = row.cells;
+            nameInput.value = cells[0].textContent;
+            studentIdInput.value = cells[1].textContent;
+            emailInput.value = cells[2].textContent;
+            contactNumberInput.value = cells[3].textContent;
+
+            // Remove the row after editing
+            table.deleteRow(row.rowIndex);
+        }
+
+        // Event listener for form submission
+        submitButton.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Validate form fields
+            if (nameInput.value && studentIdInput.value && emailInput.value && contactNumberInput.value) {
+                addStudentToTable(nameInput.value, studentIdInput.value, emailInput.value, contactNumberInput.value);
+                // Clear form fields after submission
+                nameInput.value = "";
+                studentIdInput.value = "";
+                emailInput.value = "";
+                contactNumberInput.value = "";
+            } else {
+                alert("Please fill out all fields before submitting.");
+            }
+        });
+    </script>
+</body>
+</html>
